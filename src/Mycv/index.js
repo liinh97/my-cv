@@ -1,45 +1,60 @@
-import React from "react";
+import { getDoc } from "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import ItemBox from "../Components/item-box";
+import { db } from "../Firebase/firebase-config";
+import { all, snapshotAll } from "../Firebase/firebase-repo";
 
 export default function Index() {
 
-    const item = ['header', 'goal', 'study', 'experience', 'active', 'skill', 'chứng chỉ', 'interest'];
-    
+    const [header, setHeader] = useState([]);
+    const [info, setInfo] = useState([]);
+    const [goal, setGoal] = useState(null);
+    const [box, setBox] = useState([]);
+
+    useEffect(() => {
+        all('cv').then(res => {
+            res.forEach(item => {
+                setHeader(item.data().header);
+                setInfo(item.data().information);
+                setGoal(item.data().goal);
+                setBox([item.data().item_box]);
+            });
+        });
+    }, []);
+
     return (
 
         <div id="index">
             <div className="header_box">
-                <div className="header_title">Title</div>
-                <div className="header_desc">Desc</div>
+                <div className="header_title">{header.title}</div>
+                <div className="header_desc">{header.desc}</div>
             </div>
             <div className="infomartion_box">
                 <div className="info_text">
-                    <div className="info_name">Linh</div>
-                    <div className="info_age">25</div>
-                    <div className="info_phone">033.....</div>
-                    <div className="info_address">...</div>
-                    <div className="info_emaill">...</div>
+                    <div className="info_name">{info.name}</div>
+                    <div className="info_age">{info.age}</div>
+                    <div className="info_phone">{info.phone}</div>
+                    <div className="info_address">{info.address}</div>
+                    <div className="info_emaill">{info.email}</div>
                 </div>
                 <div className="info_img">
                     <img src="" alt="" />
                 </div>
             </div>
-            <div className="goal_box">
-                Goal ....
-            </div>
-            <div className="study_box">
-                <div className="study_1">
-                    <div className="study_time">
-                        2020 - 2022
-                    </div>
-                    <div className="study_desc">
-                        <div className="study_desc-title">Title</div>
-                        <div className="study_desc-content">ABCD</div>
-                    </div>
-                </div>
-            </div>
-            <div className="experience_box">
-
-            </div>
+            <div className="goal_box">{goal}</div>
+            {
+                box.map( (e, i) => {
+                    return <ItemBox
+                        key={i}
+                        study={e.study}
+                        experience={e.experience}
+                        active={e.active}
+                        skill={e.skill}
+                        chungchi={e.chungchi}
+                        interest={e.interest}
+                    />
+                })
+            }
         </div>
 
     );
