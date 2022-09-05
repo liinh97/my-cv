@@ -1,0 +1,54 @@
+body{
+    background-color: rgb(195, 201, 238);
+}
+
+#index{
+
+}
+
+.header_box{
+    /* box-shadow: 0 0 0 1px; */
+}
+
+.top_box{
+    width: 50%;
+    margin: auto;
+    text-align: center;
+}
+
+.infomartion_box{
+    width: 70%;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 0 1px;
+    border-radius: 20px;
+}
+
+.info_img{
+    width: 40%;
+    display: flex;
+    justify-content: center;
+}
+
+img{
+    width: 70%;
+    border-radius: 50%;
+}
+
+.info_text{
+    width: 60%;
+    padding-left: 5%;
+}
+
+.info_text div{
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.goal_box{
+    padding: 0 10px;
+    margin: 20px 0;
+    box-shadow: 0 0 1px;
+}

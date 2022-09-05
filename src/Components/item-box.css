@@ -1,0 +1,21 @@
+.container_box{
+    margin: 10px;
+    box-shadow: 0 0 1px;
+}
+
+.item_box{
+    display: flex;
+    margin-top: 10px;
+    /* background-color: red; */
+}
+
+.item_box_time{
+    /* background-color: red; */
+    width: 30%;
+    text-align: center;
+}
+
+.item_box_desc{
+    width: 70%;
+    /* margin-top: 10px; */
+}
