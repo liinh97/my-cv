@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ItemBox from "../Components/item-box";
-import { all, update } from "../Firebase/firebase-repo";
+import { update, snapshotAll } from "../Firebase/firebase-repo";
 import TextContext from "../Context/TextContext";
 import "./index.css";
-import { db } from "../Firebase/firebase-config";
-import { collection, getDocs, query, where } from "firebase/firestore";
 
 export default function Index() {
 
@@ -17,35 +15,58 @@ export default function Index() {
     const [valueInp, setValueInp] = useState("");
 
     useEffect(() => {
-        all('cv').then(res => {
+
+        snapshotAll('cv', (res) => {
             res.forEach(item => {
                 setHeader(item.data().header);
-                // setInfo(item.data().information);
+                setInfo(item.data().information);
                 setGoal(item.data().goal);
                 setId(item.id);
-                // setBox(item.data().item_box);
+                setBox(item.data().item_box);
             });
-        });
+        })
+
     }, []);
 
     useEffect(() => {
-    }, [id]);
+    }, [header]);
 
     const insertOrUpdate = () => {
+
         if(text){
             const newText = text.split(".");
             const column = newText[0];
             const data = {goal, information: info, header, item_box: box};
-            let newData = {};
-            
+            let newData = {...data};
+            newData = 0;
+
             if(newText.length > 1){
                 const nameBox = newText[1];
-                data[column][nameBox] = valueInp;
+                
+                if(Array.isArray(newData[column])){
+
+                    const colum2 = newText[2];
+                    const index = newText[3];
+                    const tag = newText[4];
+
+                    newData[column].map(e => {
+                        if(e.name == nameBox){
+                            return e[colum2][index][tag] = valueInp;
+                        }
+                    });
+
+                }else{
+                    newData[column][nameBox] = valueInp;
+                }
+
             }else{
-                data[column] = valueInp;
+                newData[column] = valueInp;
             }
-            // update('cv', id, data);
-            console.log(data);
+
+            if(valueInp !== ""){
+                // update('cv', id, data);
+            }
+            console.log(data, newData)
         }
     }
 
