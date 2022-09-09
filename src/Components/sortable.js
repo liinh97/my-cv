@@ -19,6 +19,10 @@ const InfoBox = ({value}) => {
 
 const ChildBox = ({value}) => {
 
+    // value.item_child.map((e) => {console.log(e)});
+    console.log(value);
+
+    return <div></div>
     return value.item_child.map( (e, i) => {
         const query = 'item_box.' + value.name + '.item_child.' + e.sort;
         return (
@@ -61,7 +65,7 @@ export class SortableComponent extends Component {
             nextProps.items.map( item =>
                 items.push({
                     content: nextProps.tag == 'info' ? 
-                        <InfoBox value={item} /> : <ChildBox value={item}/>
+                        <InfoBox value={item} /> : <ChildBox value={'abc'}/>
                 })
             );
 
@@ -69,14 +73,27 @@ export class SortableComponent extends Component {
         }
     }
 
+    abc = [{
+        name: 'name',
+        value: 'linh'
+    }]
+
     render() {
 
         return (
-            
-            this.tag == 'child' ?
+            this.tag == 'info' ?
                 <DragSortableList moveTransitionDuration={0.1} items={this.state.items} /> :
                 <div>
-                    <DragSortableList moveTransitionDuration={0.1} items={this.state.items} />
+                    {
+                        this.state.items.map( (e, i) => {
+                            return (
+                                <div key={i} className="container_box">
+                                    <h3>{e.content.props.value.name}</h3>
+                                    <DragSortableList moveTransitionDuration={0.1} items={this.abc} />
+                                </div>
+                            )
+                        })
+                    }
                 </div>
         )
     }
