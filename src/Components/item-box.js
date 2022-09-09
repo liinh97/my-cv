@@ -6,11 +6,6 @@ export default function ItemBox(props){
 
     const {text, setText} = useContext(TextContext);
 
-    useEffect(() => {
-        // console.log(props.data);
-        // console.log(text);
-    }, [text]);
-
     return (
 
         <div className="container_box">
@@ -21,10 +16,22 @@ export default function ItemBox(props){
                     const query = 'item_box.' + props.data.name + '.item_child.' + e.sort;
                     return (
                         <div key={i} className={ 'item_' + e.sort + ' item_box'}>
-                            <div onClick={() => setText(query + '.time')} className={'item_box_time'}>{e.time}</div>
+                            <div
+                                onClick={() => setText(query + '.time')}
+                                className={'item_box_time'}
+                                >{e.time}
+                            </div>
                             <div className={'item_box_desc'}>
-                                <div onClick={() => setText(query + '.title')} className={'item_box_desc-title'}>{e.title}</div>
-                                <div onClick={() => setText(query + '.content')} className={'item_box_desc-content'}>{e.content}</div>
+                                <div
+                                    onClick={() => setText(query + '.title')}
+                                    className={'item_box_desc-title'}
+                                    >{e.title}
+                                </div>
+                                <div
+                                    onClick={() => setText(query + '.content')}
+                                    className={'item_box_desc-content'}
+                                    >{e.content}
+                                </div>
                             </div>
                         </div>
                     )
