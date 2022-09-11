@@ -76,10 +76,26 @@ export default function Index() {
         }
     }
 
+    const [arr, setArr] = useState(['One', 'Two', 'Three', 'Four', 'Five', 'Six']);
+    const [active, setActive] = useState(false);
+
+    const scroll = () => {
+
+        const delay = 2000;
+        setArr(arr.sort(() => Math.random() - 0.5));
+        setActive(active ? false : true);
+        
+        setTimeout(() => {
+            setActive(false);
+            console.log(arr);
+        }, delay);
+
+    }
+
     return (
 
         <div id="index">
-            <div hidden id="hidden_text">{text}</div>
+            {/* <div hidden id="hidden_text">{text}</div>
             <div className="header_box">
                 <div className="top_box">
                     <h1
@@ -95,11 +111,11 @@ export default function Index() {
                 </div>
                 <div className="infomartion_box">
                     <div className="info_img">
-                        {/* <img src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?w=826&t=st=1662032206~exp=1662032806~hmac=1cf9ff4fb92ba06ac1aba70d9348dc7bb52766fb7629ee15a9add21147f7fdcc" alt="avatar" /> */}
+                        <img src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?w=826&t=st=1662032206~exp=1662032806~hmac=1cf9ff4fb92ba06ac1aba70d9348dc7bb52766fb7629ee15a9add21147f7fdcc" alt="avatar" />
                     </div>
                     <div className="info_text">
                     <TextContext.Provider value={{text, setText}}>
-                        {/* <SortableComponent items={info} tag="info" /> */}
+                        <SortableComponent items={info} tag="info" />
                     </TextContext.Provider>
                     </div>
                 </div>
@@ -110,14 +126,22 @@ export default function Index() {
             </div>
             <TextContext.Provider value={{text, setText}}>
                 <ItemBox data={box} />
-                {/* <SortableComponent items={box} tag="child" /> */}
             </TextContext.Provider>
             <input
                 type="text"
                 onBlur={insertOrUpdate}
                 onChange={(e) => { setValueInp(e.target.value) }}
                 value={valueInp}
-            />
+            /> */}
+
+            <div className="container">
+                <ul style={{display: "flex", width: "400px", overflow: "hidden", backgroundColor: "gray"}}>
+                    {
+                        arr.map( (e, i) => <li className={active ? 'animation' : ''} style={{listStyleType: "none", margin: "10px", border: "1px solid red"}} key={i}>{e}</li>)
+                    }
+                </ul>
+            </div>
+            <button onClick={scroll}>CLICK</button>
         </div>
 
     );
