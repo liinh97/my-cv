@@ -99,7 +99,7 @@ export default function Index() {
                     </div>
                     <div className="info_text">
                     <TextContext.Provider value={{text, setText}}>
-                        <SortableComponent items={info} tag="info" />
+                        {/* <SortableComponent items={info} tag="info" /> */}
                     </TextContext.Provider>
                     </div>
                 </div>
@@ -109,8 +109,8 @@ export default function Index() {
                 <div onClick={() => setText('goal')} className="goal_text">{goal}</div>
             </div>
             <TextContext.Provider value={{text, setText}}>
-                {/* <ItemBox data={box} /> */}
-                <SortableComponent items={box} tag="child" />
+                <ItemBox data={box} />
+                {/* <SortableComponent items={box} tag="child" /> */}
             </TextContext.Provider>
             <input
                 type="text"

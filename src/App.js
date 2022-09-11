@@ -11,9 +11,7 @@ class App extends Component {
         return (
 
             <div className="App">
-                {/* <Index /> */}
-                <SortableList />
-                <DragDropFiles />
+                <Index />
             </div>
 
         );
