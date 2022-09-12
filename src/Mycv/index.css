@@ -52,15 +52,3 @@ img{
     margin: 20px 0;
     box-shadow: 0 0 1px;
 }
-
-.animation {
-    animation: moveSlideshow .1s linear infinite;
-}
-
-@keyframes moveSlideshow {
-
-    100% { 
-        transform: translateX(-100px);  
-    }
-
-}
