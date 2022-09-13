@@ -1,7 +1,5 @@
-import { doc, updateDoc } from "firebase/firestore";
 import React, { useContext, useEffect, useState } from "react";
 import TextContext from "../Context/TextContext";
-import { db } from "../Firebase/firebase-config";
 import { update } from "../Firebase/firebase-repo";
 import "./item-box.css";
 
@@ -12,7 +10,7 @@ export default function ItemBox(props){
     const [data, setData] = useState({});
     const [id, setId] = useState(null);
 
-    const handleStart = (index, parentIndex) => {
+    const handleStart = index => {
         setOldIndex(index);
     }
 
@@ -22,10 +20,12 @@ export default function ItemBox(props){
     }, [props]);
     
     const handleDrop = (parentIndex, childIndex) => {
+
         const data = props.data[parentIndex].item_child;
         const newData = {
             ["item_box."+parentIndex+".item_child"]: handleSwapData(data, oldIndex, childIndex)
         };
+
         update('cv', id, newData);
     }
 
@@ -40,6 +40,29 @@ export default function ItemBox(props){
         data[newIndex] = clone;
         data[newIndex].sort = newIndex;
         return data;
+    }
+
+    const removeItem = (parentIndex, childIndex) => {
+
+        const newData = {
+            ["item_box."+parentIndex+".item_child"]: data[parentIndex].item_child.filter( e => {
+                return e.sort !== childIndex;
+            })
+        };
+
+        update('cv', id, newData);
+    }
+
+    const newItem = index => {
+
+        const newData = {
+            ["item_box."+index+".item_child"]: [
+                ...data[index].item_child, 
+                { time: "new_item", title: "new_item", content: "new_item", sort: data[index].item_child.length }
+            ],
+        }
+
+        update('cv', id, newData);
     }
 
     return (
@@ -61,7 +84,7 @@ export default function ItemBox(props){
                                             key={childIndex}
                                             className={ 'item_' + e.sort + ' item_box'}
                                             draggable
-                                            onDragStart={() => handleStart(childIndex, parentIndex)}
+                                            onDragStart={() => handleStart(childIndex)}
                                             onDrop={() => handleDrop(parentIndex, childIndex)}
                                             onDragOver={handleOver}
                                             >
@@ -82,10 +105,24 @@ export default function ItemBox(props){
                                                     >{e.content}
                                                 </div>
                                             </div>
+                                            {
+                                                childIndex > 0 ?
+                                                    <div
+                                                        className="remove_item"
+                                                        onClick={() => removeItem(parentIndex, childIndex)}
+                                                        >delete
+                                                    </div> :
+                                                    ""
+                                            }
                                         </div>
                                     )
                                 })
                             }
+                            </div>
+                            <div
+                                className="new_item"
+                                onClick={() => newItem(parentIndex)}
+                                >+
                             </div>
                         </div>
                     )
