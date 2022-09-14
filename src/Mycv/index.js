@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { update, snapshotAll } from "../Firebase/firebase-repo";
+import { update, snapshotAll, uploadImage, getImage } from "../Firebase/firebase-repo";
 import TextContext from "../Context/TextContext";
 import ItemBox from "../Components/item-box";
 import "./index.css";
@@ -13,6 +13,7 @@ export default function Index() {
     const [box, setBox] = useState([]);
     const [text, setText] = useState(null);
     const [valueInp, setValueInp] = useState("");
+    const [avatar, setAvatar] = useState(null);
 
     useEffect(() => {
 
@@ -23,6 +24,7 @@ export default function Index() {
                 setGoal(item.data().goal);
                 setId(item.id);
                 setBox(item.data().item_box);
+                setAvatar(item.data().avatar);
             });
         });
 
@@ -39,12 +41,12 @@ export default function Index() {
             breakpoint: if (newText.length > 1) {
                 const nameBox = newText[1];
                 const colum2 = newText[2];
-                
-                if (typeof(data[column]) === 'object' && colum2 !== undefined) {
+
+                if (typeof (data[column]) === 'object' && colum2 !== undefined) {
                     const index = newText[3];
                     const tag = newText[4];
 
-                    if(index == undefined){
+                    if (index == undefined) {
                         if (status) data[column][nameBox][colum2] = valueInp;
                         break breakpoint;
                     }
@@ -52,9 +54,9 @@ export default function Index() {
                     Object.keys(data[column]).map(e => {
                         if (data[column][e].name == nameBox) {
 
-                            if(colum2 == null){
+                            if (colum2 == null) {
                                 if (status) data[column][e].value = valueInp;
-                            }else{
+                            } else {
                                 if (status) data[column][e][colum2][index][tag] = valueInp;
                             }
 
@@ -74,6 +76,14 @@ export default function Index() {
             if (status) update('cv', id, data);
             setValueInp("");
         }
+    }
+
+    const handleFile = file => {
+
+        uploadImage(file).then( res => {
+            getImage(res).then( img => update('cv', id, {avatar: img}));
+        });
+
     }
 
     return (
@@ -96,7 +106,11 @@ export default function Index() {
                     </div>
                     <div className="infomartion_box">
                         <div className="info_img">
-                            {/* <img src="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg?w=826&t=st=1662032206~exp=1662032806~hmac=1cf9ff4fb92ba06ac1aba70d9348dc7bb52766fb7629ee15a9add21147f7fdcc" alt="avatar" /> */}
+                            <label htmlFor="upload"><img src={avatar} alt="avatar" /></label>
+                            <input
+                                hidden type="file" id="upload"
+                                onChange={(e) => handleFile(e.target.files[0])}
+                            />
                         </div>
                         <div className="info_text">
                             {
@@ -119,10 +133,8 @@ export default function Index() {
                 </div>
                 <ItemBox data={box} id={id} />
                 <input
-                    type="text"
-                    onBlur={insertOrUpdate}
+                    type="text" onBlur={insertOrUpdate} value={valueInp}
                     onChange={(e) => { setValueInp(e.target.value) }}
-                    value={valueInp}
                 />
             </TextContext.Provider>
         </div>

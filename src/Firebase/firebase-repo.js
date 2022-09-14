@@ -1,5 +1,6 @@
 import { addDoc, collection, deleteDoc, doc, getDocs, onSnapshot, updateDoc } from "firebase/firestore";
-import { db } from "../Firebase/firebase-config";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { db, st } from "../Firebase/firebase-config";
 
 const all = async (q) => {
     if(checkObj(q)){
@@ -32,4 +33,25 @@ const checkObj = input => {
     return false;
 }
 
-export { all, store, update, destroy, col, snapshotAll };
+const createFileName = file => {
+    const name = file.name.split('.');
+    return Date.now() + '.' + name[name.length - 1];
+}
+
+const uploadImage = file => {
+    const url = '/avatar/' + createFileName(file);
+    const storageRef = ref(st, url);
+
+    return uploadBytes(storageRef, file);
+}
+
+const getImage = response => {
+    return getDownloadURL(response.ref)
+}
+
+const deleteImage = url => {
+    const desertRef = ref(st, url);
+    return deleteObject(desertRef);
+}
+
+export { all, store, update, destroy, col, snapshotAll, uploadImage, getImage, deleteImage };
